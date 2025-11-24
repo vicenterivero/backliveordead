@@ -1,13 +1,18 @@
 import express from "express";
 import { pool } from "./db.js";
+import cors from "cors"; 
 
 const app = express();
+
+app.use(cors({
+  origin: "http://localhost:5173", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 
-/**
- * POST /user
- * Crea o actualiza un usuario según el nombre
- */
+
 app.post("/user", async (req, res) => {
   const { name, google_token, play_time_seconds } = req.body;
 
@@ -44,10 +49,6 @@ app.post("/user", async (req, res) => {
 });
 
 
-/**
- * GET /users?page=1&limit=10
- * Lista usuarios ordenados por tiempo ascendente con paginación
- */
 app.get("/users", async (req, res) => {
   let { page = 1, limit = 10 } = req.query;
 
